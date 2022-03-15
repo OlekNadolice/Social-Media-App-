@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Login, Register, Home, NotFound, User } from "pages/index";
+import { Navbar } from "components/index";
+import { ProtectedRoute, PublicRoute } from "helpers/index";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <Router>
+        <Routes>
+          <Route path="/login" element={<PublicRoute element={<Login />} />} />
+          <Route path="/register" element={<PublicRoute element={<Register />} />} />
+          <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
+          <Route path="/users/:id" element={<ProtectedRoute element={<User />} />} />
+          <Route path="*" element={<ProtectedRoute element={<NotFound />} />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
