@@ -1,14 +1,33 @@
 import styled from "styled-components";
 
+export const animationVariants = {
+  hidden: {
+    scale: 0,
+    opacity: 0,
+  },
+  visible: {
+    scale: 1,
+    opacity: 1,
+  },
+
+  exit: {
+    opacity: 0,
+    scale: 0,
+  },
+
+  transition: {
+    duration: 0.6,
+  },
+};
+
 export const StyledPost = styled.article`
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   margin: 0 auto;
   color: #444;
-  width: clamp(280px, 60vw, 600px);
+  width: ${props => props.width || "clamp(280px, 60vw, 600px)"};
   cursor: pointer;
 
-  /* height: 150px; */
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -24,7 +43,7 @@ export const StyledPost = styled.article`
     align-items: center;
 
     span {
-      color: ${props => (props.negative ? "red" : "green")};
+      color: ${props => props.color || "#444"};
 
       font-weight: bold;
       font-size: 20px;
@@ -42,8 +61,8 @@ export const StyledPost = styled.article`
 
     img {
       border-radius: 50%;
-      width: 60px;
-      height: 60px;
+      width: 45px;
+      height: 45px;
       object-fit: cover;
     }
   }

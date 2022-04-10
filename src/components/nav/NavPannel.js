@@ -1,39 +1,35 @@
-import { useSelector } from "react-redux";
+import NavigationRight from "./NavigationRight";
+import NavigationLeft from "./NavigationLeft";
+import SearchBar from "components/SearchBar/SearchBar";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { CgClose } from "react-icons/cg";
+import { useState } from "react";
+import MobileSidebar from "./MobileSidebar";
+import { AnimatePresence } from "framer-motion";
+import useMediaQuery from "hooks/useMediaQuery";
 
-import { GiHamburger } from "react-icons/gi";
-import { RiNotification2Line } from "react-icons/ri";
-import { FiSearch, FiSettings } from "react-icons/fi";
-
-import Menu from "./Menu";
-const NavPannel = ({ isMobileSearchBarOpen, isHamburgerMenuOpen, dispatch }) => {
-  const { name, profileImage } = useSelector(state => state.user);
+const NavPannel = ({ isMobileSearchBarOpen, dispatch }) => {
+  const visible = useMediaQuery("(min-width:660px)");
+  const maxWidth660 = useMediaQuery("(max-width:660px)");
+  const [isMobileNavigationOpen, setIsMobileNavigationOpen] = useState(false);
 
   if (!isMobileSearchBarOpen) {
     return (
       <>
-        <section>
-          <img
-            src={
-              profileImage ||
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0eezZEdzm25YbJaAlB6tFjZQyipeAWHwf9Q&usqp=CAU"
-            }
-          />
-          <h2>{name || "default"}</h2>
-        </section>
-        <div>
-          <input placeholder="What are you looking for ?" type="search" />
-          <FiSearch />
-        </div>
-        <section>
-          <GiHamburger onClick={() => dispatch({ type: "TOOGLE_HAMBURGER_MENU" })} />
-
-          <FiSearch onClick={() => dispatch({ type: "TOOGLE_MOBILE_SEARCH_BAR" })} />
-          <RiNotification2Line
-            onClick={() => dispatch({ type: "TOOGLE_NOTIFICATION_MODAL" })}
-          />
-          <FiSettings onClick={() => dispatch({ type: "TOOGLE_SETTINGS_MODAL" })} />
-        </section>
-        <Menu dispatch={dispatch} isHamburgerMenuOpen={isHamburgerMenuOpen} />
+        <NavigationLeft />
+        {visible && <SearchBar />}
+        {visible && <NavigationRight dispatch={dispatch} />}
+        {maxWidth660 && !isMobileNavigationOpen && (
+          <GiHamburgerMenu onClick={() => setIsMobileNavigationOpen(true)} />
+        )}
+        {maxWidth660 && isMobileNavigationOpen && (
+          <CgClose onClick={() => setIsMobileNavigationOpen(false)} />
+        )}
+        <AnimatePresence>
+          {isMobileNavigationOpen && (
+            <MobileSidebar isOpen={isMobileNavigationOpen} dispatch={dispatch} />
+          )}
+        </AnimatePresence>
       </>
     );
   } else {

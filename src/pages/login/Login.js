@@ -4,18 +4,20 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "store/userSlice";
 
 import { auth, db } from "FirebaseDB/firebaseConfig";
+
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
   FacebookAuthProvider,
 } from "firebase/auth";
-import { getStorage, ref } from "firebase/storage";
+
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 
 import { BsFacebook } from "react-icons/bs";
 import { StyledContainer, StyledForm, Button, FormControl } from "components/index";
 
-export const Login = () => {
+const Login = () => {
   const dispatch = useDispatch();
   const storage = getStorage();
   const [formState, setFormState] = useState({
@@ -31,13 +33,16 @@ export const Login = () => {
   const loginUserToPage = async e => {
     try {
       e.preventDefault();
+
       const response = await signInWithEmailAndPassword(auth, emailInput, passwordInput);
       const { uid } = response.user;
-
       const user = await getDoc(await doc(db, "users", uid), {});
       const photoURL = await ref(storage, uid);
+
+      // const img = await getDownloadURL(ref(storage, uid));
+
       const { name, age, description } = user.data();
-      dispatch(loginUser({ name, image: photoURL, id: uid, age, description }));
+      dispatch(loginUser({ name, id: uid, age, description }));
     } catch (err) {
       switch (err.message) {
         case "Firebase: Error (auth/invalid-email).":
@@ -67,7 +72,7 @@ export const Login = () => {
       const { uid } = response.user;
       const user = await getDoc(await doc(db, "users", uid), {});
       const photoURL = await ref(storage, uid);
-      console.log(photoURL);
+      const img = await getDownloadURL(ref(storage, uid));
       const { name, age, description } = user.data();
 
       if (!user.exists()) {
@@ -78,7 +83,7 @@ export const Login = () => {
           name: name,
           age: age,
           description: description,
-          image: photoURL,
+          image: img,
           id: uid,
         })
       );
@@ -123,3 +128,5 @@ export const Login = () => {
     </StyledContainer>
   );
 };
+
+export default Login;

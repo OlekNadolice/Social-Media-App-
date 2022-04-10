@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-const StyledWelcomePopUp = styled.section`
+const StyledSettings = styled.section`
   display: flex;
   flex-direction: column;
-  /* background-color: red; */
+
   justify-content: center;
   min-height: calc(100% - 60px);
   padding: 40px clamp(10px, 10vw, 100px);
@@ -54,4 +54,4 @@ export const StyledFormProgressBar = styled.span`
   width: calc((100% - (3 * 20px)) / 2);
 `;
 
-export default StyledWelcomePopUp;
+export default StyledSettings;

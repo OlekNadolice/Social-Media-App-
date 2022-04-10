@@ -16,22 +16,36 @@ const ThirdStep = () => {
   const reader = new FileReader();
   const inputRef = useRef();
   const [img, setImg] = useState(formProfileImage || profileImage || image);
+  const [imgRef, setImgRef] = useState("");
 
   const formik = useFormik({
     initialValues: {
       file: img,
     },
+
     validationSchema: Yup.object({
       file: Yup.mixed()
         .test("fileType", "Unsupported file format", value => {
-          return fileTypes.includes(inputRef.current.files[0].type);
+          if (inputRef.current.files[0]) {
+            return fileTypes.includes(inputRef.current.files[0].type);
+          } else {
+            return true;
+          }
         })
         .test("fileSize", "File is too large", value => {
-          return inputRef.current.files[0].size <= maxFileSize;
+          if (inputRef.current.files[0]) {
+            return inputRef.current.files[0].size <= maxFileSize;
+          } else {
+            return true;
+          }
         }),
     }),
     onSubmit: () => {
-      dispatch(validateThirdStep(img));
+      if (inputRef.current.files[0]) {
+        dispatch(validateThirdStep({ profileImage: imgRef, navUserImage: img }));
+      } else {
+        dispatch(oneStepBackwards(4));
+      }
     },
   });
 
@@ -46,8 +60,8 @@ const ThirdStep = () => {
         accept={"image/*"}
         onChange={e => {
           formik.handleChange(e);
-
           const file = e.target.files[0];
+          setImgRef(e.target.files[0]);
 
           reader.onload = () => {
             setImg(reader.result);
@@ -55,7 +69,6 @@ const ThirdStep = () => {
           reader.readAsDataURL(file);
         }}
         error={formik.touched.file && formik.errors.file}
-        display="none"
         onBlur={formik.handleBlur}
         ref={inputRef}
       />

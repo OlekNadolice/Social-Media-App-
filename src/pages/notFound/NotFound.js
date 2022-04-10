@@ -4,8 +4,9 @@ import styled from "styled-components";
 import { FaRegSadCry } from "react-icons/fa";
 import { Button } from "components/index";
 
-export const NotFound = () => {
+const NotFound = () => {
   const { name } = useSelector(state => state.user);
+
   return (
     <StyledNotFound>
       <section>
@@ -58,3 +59,5 @@ const StyledNotFound = styled.div`
     letter-spacing: 2px;
   }
 `;
+
+export default NotFound;

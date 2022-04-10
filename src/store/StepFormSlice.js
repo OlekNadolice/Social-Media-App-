@@ -4,7 +4,7 @@ const initialState = {
   currentStep: 1,
   name: "",
   profileImage: "",
-
+  navUserImage: "",
   age: 0,
 };
 
@@ -22,11 +22,14 @@ const StepFormSlice = createSlice({
     },
 
     validateThirdStep: (state, action) => {
-      state.profileImage = action.payload;
+      state.profileImage = action.payload.profileImage;
+      state.navUserImage = action.payload.navUserImage;
       state.currentStep = 4;
     },
 
-    validateFourthStep: (state, action) => {},
+    resetFormSteps: (state, action) => {
+      state.currentStep = 1;
+    },
 
     oneStepBackwards: (state, action) => {
       state.currentStep = action.payload;
@@ -41,6 +44,7 @@ export const {
   validateFourthStep,
   validateFifthStep,
   oneStepBackwards,
+  resetFormSteps,
 } = StepFormSlice.actions;
 
 export default StepFormSlice.reducer;

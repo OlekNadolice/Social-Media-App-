@@ -8,7 +8,9 @@ export const Button = ({
   color,
   backgroundColor,
   backgroundImage,
+  border,
   children,
+  borderRadius,
 }) => {
   return (
     <StyledButton
@@ -18,6 +20,8 @@ export const Button = ({
       width={width}
       height={height}
       onClick={onClick}
+      border={border}
+      borderRadius={borderRadius}
     >
       {text}
       {children}
@@ -36,8 +40,8 @@ const StyledButton = styled.button`
   background-image: ${props => props.backgroundImage || null};
   outline: none;
   cursor: pointer;
-  border: none;
-
+  border: ${props => props.border || "none"};
+  border-radius: ${props => props.borderRadius};
   svg {
     order: -1;
     margin-right: 10px;

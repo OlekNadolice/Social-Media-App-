@@ -27,9 +27,19 @@ export const userSlice = createSlice({
       state.name = action.payload.name;
       state.profileImage = action.payload.profileImage;
     },
+
+    logoutUser: state => {
+      state.isLoggedIn = false;
+      state.name = "";
+      state.profileImage = "";
+      state.email = "";
+      state.age = "";
+      state.description = "";
+      state.id = "";
+    },
   },
 });
 
-export const { loginUser, updateUserInfo } = userSlice.actions;
+export const { loginUser, updateUserInfo, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

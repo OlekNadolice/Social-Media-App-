@@ -1,41 +1,42 @@
 import { useSelector, useDispatch } from "react-redux";
-import { oneStepBackwards } from "store/StepFormSlice";
+import { oneStepBackwards, resetFormSteps } from "store/StepFormSlice";
 import { updateUserInfo } from "store/userSlice";
 import { useState } from "react";
 import { Button, StyledTextArea } from "components/index";
 
-import { updateProfile } from "firebase/auth";
-import { auth } from "FirebaseDB/firebaseConfig";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { setDoc, doc } from "@firebase/firestore";
 import { db } from "FirebaseDB/firebaseConfig";
 
-const FourthStep = () => {
-  const { currentStep, name, profileImage, age } = useSelector(state => state.StepForm);
+const FourthStep = ({ setIsOpen }) => {
+  const { name, profileImage, age, navUserImage } = useSelector(state => state.StepForm);
   const { id, description } = useSelector(state => state.user);
   const [textAreaValue, setTextAreaValue] = useState(description);
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const storage = getStorage();
   const storageRef = ref(storage, id);
   const saveSettings = async e => {
     try {
-      await uploadBytes(storageRef, profileImage);
+      profileImage && (await uploadBytesResumable(storageRef, profileImage));
+
       await setDoc(doc(db, "users", id), {
         name,
         age,
         description: textAreaValue,
       });
-      // await updateProfile(auth.currentUser, {
-      //   displayName: name,
-      // });
-      dispatch(updateUserInfo({ name, profileImage }));
+
+      dispatch(updateUserInfo({ name, profileImage: navUserImage }));
+      setIsOpen();
+      dispatch(resetFormSteps());
     } catch (err) {
-      console.log(err);
+      setError("Ups Something Went Wrong!");
     }
   };
 
   return (
     <>
+      {error && <p>{error}</p>}
       <label>Description</label>
       <StyledTextArea
         value={textAreaValue}

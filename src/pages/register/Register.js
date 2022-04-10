@@ -3,13 +3,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "FirebaseDB/firebaseConfig";
+
 import { setDoc, doc } from "@firebase/firestore";
 import * as Yup from "yup";
 
 import ThankYou from "./ThankYou";
 import { StyledContainer, StyledForm, Button, FormControl } from "components/index";
 
-export const Register = () => {
+const Register = () => {
   const [formState, setFormState] = useState({
     error: "",
     submited: false,
@@ -31,6 +32,7 @@ export const Register = () => {
       try {
         const { email, password } = values;
         const user = await createUserWithEmailAndPassword(auth, email, password);
+
         await setDoc(doc(db, "users", user.user.uid), {});
         setFormState(prevState => {
           return { ...prevState, submited: true };
@@ -89,3 +91,5 @@ export const Register = () => {
     </StyledContainer>
   );
 };
+
+export default Register;

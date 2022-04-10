@@ -1,30 +1,56 @@
+import { useState } from "react";
 import { Post } from "components/index";
-import StyledHomeDiv from "./StyledHome";
+import StyledHomeDiv, { StyledContainerForPosts } from "./StyledHome";
+import useGetPosts from "hooks/useGetPosts";
+import { Loading } from "components/index";
+import { useParams } from "react-router-dom";
 
-export const Home = () => {
+import { motion } from "framer-motion";
+
+const Home = () => {
+  const [skip, setSkip] = useState("");
+  const { tag } = useParams();
+  const { posts, error, loading, setPosts } = useGetPosts(null, skip, tag);
+
+  const handleScroll = event => {
+    const { scrollTop, scrollTopMax } = event.target;
+    if (scrollTop === scrollTopMax) {
+      setSkip(posts[posts.length - 1].created);
+    }
+  };
+
+  if (loading && posts.length === 0) {
+    return <Loading loading={loading}></Loading>;
+  }
+
   return (
     <>
       <StyledHomeDiv>
-        <Post
-          img="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-          author="Marcin"
-          description="I dont know how can i stop eating junk food"
-          likes="+ 44"
-        />
-        <Post
-          img="https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8ZmFjZXN8ZW58MHx8MHx8&w=1000&q=80"
-          author="Elizabeth"
-          description="I have a fucking depression, what should i do, lorem ipsum dolor sit amet, lorem ipsum dolor sit amet,lorem ipsum dolor sit amet,lorem ipsum dolor sit amet,lorem ipsum, lorem ipsum, lorem ipsum, lorem ips, lorem ipsum, lorem ipsum, lorem ips, lorem ipsum, lorem ipsum, lorem ips , lorem ipsum, lorem"
-          likes="+ 101"
-        />
-        <Post
-          img="https://i.pinimg.com/originals/57/e0/5b/57e05b767655c8b617f926c7070a5a51.jpg"
-          author="Jake"
-          description="I'm a handsome guy"
-          likes="- 50"
-          negative="negative"
-        />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <StyledContainerForPosts onScroll={handleScroll}>
+            {posts.map(post => {
+              return (
+                <Post
+                  setPosts={setPosts}
+                  key={post.author + Math.floor(Math.random() * 600000000)}
+                  author={post.authorName || "noname"}
+                  description={post.body}
+                  likes={post.likes}
+                  dislikes={post.dislikes}
+                  tags={post.tags}
+                  img={post.img}
+                  id={post.author}
+                  postID={post.postID}
+                />
+              );
+            })}
+
+            {loading && posts && <Loading height="60px" />}
+          </StyledContainerForPosts>
+        </motion.div>
       </StyledHomeDiv>
     </>
   );
 };
+
+export default Home;

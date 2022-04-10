@@ -1,4 +1,4 @@
-import { StyledFormStep, StyledFormProgressBar } from "./StyledWelcomePopUp";
+import { StyledFormStep, StyledFormProgressBar } from "../StyledSettings";
 import { useSelector } from "react-redux";
 import { MdDone } from "react-icons/md";
 import styled from "styled-components";

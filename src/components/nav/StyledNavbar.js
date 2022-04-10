@@ -14,7 +14,15 @@ const StyledNavbar = styled.nav`
     right:0;
     z-index:2;
     flex-wrap: wrap;
+
+    svg {
+      font-size:25px;
+      cursor:pointer;
+    }
     
+    a {
+      color:#fff;
+    }
 
     h2 {
       font-size: clamp(18px, 10vw, 22px);
@@ -53,7 +61,7 @@ const StyledNavbar = styled.nav`
       
 
       svg {
-        font-size: 25px;
+        font-size: 22px;
         cursor: pointer;
        
        
@@ -61,8 +69,8 @@ const StyledNavbar = styled.nav`
 
       img {
         border-radius: 50%;
-        height: 55px;
-        width: 55px;
+        height: clamp(35px, 10vw, 55px);
+        width: clamp(35px, 10vw, 55px);
         object-fit: cover;
       }
     }
@@ -129,16 +137,14 @@ const StyledNavbar = styled.nav`
   @media (min-width: 668px) {
     section {
       svg:nth-of-type(2) {
-        display: none;
+        /* display: none; */
       }
     }
   }
 
   @media (max-width: 668px) {
    
-      div {
-        display: none;
-      }
+     
 
       span:not(.closebtn) {
         display: flex;

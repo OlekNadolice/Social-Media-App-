@@ -6,7 +6,8 @@ import StyledNavbar from "./StyledNavbar";
 
 import navbarReducer, { initialState } from "./navbarReducer";
 import NavPannel from "./NavPannel";
-import MobileSearchBar from "./MobileSearchBar";
+
+import SearchBar from "components/SearchBar/SearchBar";
 
 export const Navbar = () => {
   const { isLoggedIn } = useSelector(state => state.user);
@@ -27,10 +28,7 @@ export const Navbar = () => {
             isMobileSearchBarOpen={isMobileSearchBarOpen}
             isHamburgerMenuOpen={isHamburgerMenuOpen}
           />
-          <MobileSearchBar
-            isMobileSearchBarOpen={isMobileSearchBarOpen}
-            dispatch={dispatch}
-          />
+          {isMobileSearchBarOpen && <SearchBar width="300px" dispatch={dispatch} />}
         </StyledNavbar>
         {isNotificationModalOpen && (
           <Modal
