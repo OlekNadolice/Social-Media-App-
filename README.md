@@ -1,4 +1,4 @@
-I still have a lot of work todo.
+I still have a lot of work to do.
 
 #Screenshots so far.
 
